@@ -16,16 +16,16 @@ public class QuizActivity extends AppCompatActivity {
 
     trueButton = findViewById(R.id.question_button_true);
     trueButton.setOnClickListener(v -> {
-      ShowToastCorrectly(true);
+      showToastCorrectly(true);
     });
 
     falseButton = findViewById(R.id.question_button_false);
     falseButton.setOnClickListener(v -> {
-      ShowToastCorrectly(false);
+      showToastCorrectly(false);
     });
   }
 
-  private void ShowToastCorrectly(boolean isCorrect) {
+  private void showToastCorrectly(boolean isCorrect) {
     Toast toast;
     if (isCorrect) {
       toast = Toast.makeText(this, R.string.correct_toast, Toast.LENGTH_SHORT);
