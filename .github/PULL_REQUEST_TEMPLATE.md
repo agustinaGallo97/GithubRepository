@@ -1,5 +1,6 @@
-## :link: Pivotal Tracker reference:
+## :link: Jira Tracker reference:
 * [Title of the card](https://link-to-pivotal-card)
+
 ## Description:
 <!---
 Add a description of the feature or bug you are tackling. First in high level 
@@ -7,12 +8,15 @@ perspective and then you can describe your solution. Include acceptance criteria
 diagrams of the code, or anything else you consider that might help other 
 developers understand your decisions.
 -->
+
 ## :camera_flash: UI preview
 <!--- Add a GIF or screenshot -->
+
 ## :pushpin: Notes:
 <!--- 
 * Include pending tasks, TODOs, assumptions, or comments like 'Needs migrating'
 -->
+
 ## :warning: Warnings:
 <!---
 * Include a list of considerations for reviewers or future developers. For example:
