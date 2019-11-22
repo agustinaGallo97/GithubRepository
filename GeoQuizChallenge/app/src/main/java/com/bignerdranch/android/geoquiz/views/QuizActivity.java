@@ -1,4 +1,4 @@
-package com.bignerdranch.android.geoquiz.Views;
+package com.bignerdranch.android.geoquiz.views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,12 +10,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bignerdranch.android.geoquiz.Controllers.QuestionController;
-import com.bignerdranch.android.geoquiz.Models.Question;
+import com.bignerdranch.android.geoquiz.controllers.QuestionController;
+import com.bignerdranch.android.geoquiz.models.Question;
 import com.bignerdranch.android.geoquiz.R;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import androidx.annotation.StringRes;
 
@@ -34,7 +35,7 @@ public class QuizActivity extends AppCompatActivity {
   private int currentIndex = 0;
   private int countOfCorrectQuestionsResolved = 0;
   private int countOfQuestionsResolved = 0;
-  private HashSet<Question> resolvedQuestions = new HashSet();
+  private Set<Question> resolvedQuestions = new HashSet();
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +54,10 @@ public class QuizActivity extends AppCompatActivity {
     });
 
     trueButton = findViewById(R.id.questionButtonTrue);
-    trueButton.setOnClickListener(v -> showToastCorrectly(true));
+    trueButton.setOnClickListener(v -> updateView(true));
 
     falseButton = findViewById(R.id.questionButtonFalse);
-    falseButton.setOnClickListener(v -> showToastCorrectly(false));
+    falseButton.setOnClickListener(v -> updateView(false));
 
     prevButton = findViewById(R.id.prevButton);
     prevButton.setOnClickListener(v -> {
@@ -116,9 +117,9 @@ public class QuizActivity extends AppCompatActivity {
     questionTextView.setText(actualQuestion.getTextResId());
 
     if (resolvedQuestions.contains(actualQuestion)) {
-      disableButtons(false);
+      setButtonsState(false);
     } else {
-      disableButtons(true);
+      setButtonsState(true);
     }
 
     if (countOfQuestionsResolved == questionBank.size()) {
@@ -127,26 +128,38 @@ public class QuizActivity extends AppCompatActivity {
     }
   }
 
-  private void showToastCorrectly(boolean isCorrect) {
+  private void updateView(boolean isCorrect) {
     Question actualQuestion = questionBank.get(currentIndex);
     if (resolvedQuestions.contains(actualQuestion)) {
-      disableButtons(false);
+      setButtonsState(false);
     } else {
-      @StringRes
-      int answerTest = isCorrect ? R.string.correct : R.string.incorrect;
-      Toast toast = Toast.makeText(this, answerTest, Toast.LENGTH_SHORT);
-      toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
-      toast.show();
-      if (isCorrect) {
-        countOfCorrectQuestionsResolved += 1;
-      }
-      countOfQuestionsResolved += 1;
-      resolvedQuestions.add(actualQuestion);
-      disableButtons(false);
+      showToastCorrectly(isCorrect);
+      increaseCounters(isCorrect);
+      updateResolvedQuestions(actualQuestion);
     }
   }
 
-  private void disableButtons(boolean value) {
+  private void showToastCorrectly(boolean isCorrect) {
+    @StringRes
+    int answerTest = isCorrect ? R.string.correct : R.string.incorrect;
+    Toast toast = Toast.makeText(this, answerTest, Toast.LENGTH_SHORT);
+    toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
+    toast.show();
+  }
+
+  private void increaseCounters(boolean isCorrect) {
+    if (isCorrect) {
+      countOfCorrectQuestionsResolved += 1;
+    }
+    countOfQuestionsResolved += 1;
+  }
+
+  private void updateResolvedQuestions(Question actualQuestion) {
+    resolvedQuestions.add(actualQuestion);
+    setButtonsState(false);
+  }
+
+  private void setButtonsState(boolean value) {
     falseButton.setEnabled(value);
     trueButton.setEnabled(value);
   }
