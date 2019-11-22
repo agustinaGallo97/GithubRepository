@@ -123,7 +123,7 @@ public class QuizActivity extends AppCompatActivity {
 
     if (countOfQuestionsResolved == questionBank.size()) {
       String percentage = (countOfCorrectQuestionsResolved) + "/" + (countOfQuestionsResolved);
-      Toast.makeText(this, "El resultado promedio es: " + percentage, Toast.LENGTH_SHORT).show();
+      Toast.makeText(this, "The average is: " + percentage, Toast.LENGTH_SHORT).show();
     }
   }
 
