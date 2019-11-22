@@ -6,15 +6,14 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".QuizActivity"
+    tools:context=".Views.QuizActivity"
     >
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/questionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="24dp"
-        android:text="@string/question_text"
         />
 
     <LinearLayout
@@ -24,18 +23,40 @@
         >
 
         <Button
-            android:id="@+id/question_button_true"
+            android:id="@+id/questionButtonTrue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/question_button_true"
+            android:text="@string/button_true"
             android:textAllCaps="true"
             />
 
         <Button
-            android:id="@+id/question_button_false"
+            android:id="@+id/questionButtonFalse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/question_button_false"
+            android:text="@string/button_false"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <ImageButton
+            android:id="@+id/prevButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/arrow_left"
+            />
+
+        <ImageButton
+            android:id="@+id/nextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/arrow_right"
             />
 
     </LinearLayout>
