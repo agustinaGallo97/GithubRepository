@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 public class QuestionController {
   @NonNull
   private static final QuestionController INSTANCE = new QuestionController();
+  @NonNull
   private List<Question> questionBank;
 
   private QuestionController() {

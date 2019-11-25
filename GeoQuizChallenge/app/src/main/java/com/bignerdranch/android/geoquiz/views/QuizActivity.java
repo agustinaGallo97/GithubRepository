@@ -1,5 +1,6 @@
 package com.bignerdranch.android.geoquiz.views;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -35,7 +36,8 @@ public class QuizActivity extends AppCompatActivity {
   private int currentIndex = 0;
   private int countOfCorrectQuestionsResolved = 0;
   private int countOfQuestionsResolved = 0;
-  private Set<Question> resolvedQuestions = new HashSet();
+  @NonNull
+  private final Set<Question> resolvedQuestions = new HashSet();
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -115,13 +117,7 @@ public class QuizActivity extends AppCompatActivity {
   private void updateQuestion() {
     Question actualQuestion = questionBank.get(currentIndex);
     questionTextView.setText(actualQuestion.getTextResId());
-
-    if (resolvedQuestions.contains(actualQuestion)) {
-      setButtonsState(false);
-    } else {
-      setButtonsState(true);
-    }
-
+    setButtonsState(!(resolvedQuestions.contains(actualQuestion)));
     if (countOfQuestionsResolved == questionBank.size()) {
       String percentage = (countOfCorrectQuestionsResolved) + "/" + (countOfQuestionsResolved);
       Toast.makeText(this, "The average is: " + percentage, Toast.LENGTH_SHORT).show();
@@ -154,14 +150,15 @@ public class QuizActivity extends AppCompatActivity {
     countOfQuestionsResolved += 1;
   }
 
+  @NonNull
   private void updateResolvedQuestions(Question actualQuestion) {
     resolvedQuestions.add(actualQuestion);
     setButtonsState(false);
   }
 
-  private void setButtonsState(boolean value) {
-    falseButton.setEnabled(value);
-    trueButton.setEnabled(value);
+  private void setButtonsState(boolean enabled) {
+    falseButton.setEnabled(enabled);
+    trueButton.setEnabled(enabled);
   }
 }
 
