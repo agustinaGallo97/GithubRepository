@@ -4,13 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bignerdranch.android.geoquiz.BuildConfig;
 import com.bignerdranch.android.geoquiz.controllers.QuestionController;
 import com.bignerdranch.android.geoquiz.models.Question;
 import com.bignerdranch.android.geoquiz.R;
@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 import androidx.annotation.StringRes;
+import timber.log.Timber;
 
 public class QuizActivity extends AppCompatActivity {
   private static final String TAG = "QuizActivity";
@@ -42,7 +43,11 @@ public class QuizActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    Log.d(TAG, "onCreate(Bundle) called");
+
+    if (BuildConfig.DEBUG) {
+      Timber.plant(new Timber.DebugTree());
+    }
+    Timber.d("onCreate(Bundle) called");
     setContentView(R.layout.activity_quiz);
 
     if (savedInstanceState != null) {
@@ -80,38 +85,38 @@ public class QuizActivity extends AppCompatActivity {
   @Override
   public void onSaveInstanceState(Bundle savedInstanceState) {
     super.onSaveInstanceState(savedInstanceState);
-    Log.i(TAG, "onSaveInstanceState");
+    Timber.d("onSaveInstanceState");
     savedInstanceState.putInt(KEY_INDEX, currentIndex);
   }
 
   @Override
   public void onStart() {
     super.onStart();
-    Log.d(TAG, "onStart() called");
+    Timber.d("onStart() called");
   }
 
   @Override
   public void onPause() {
     super.onPause();
-    Log.d(TAG, "onPause() called");
+    Timber.d("onPause() called");
   }
 
   @Override
   public void onResume() {
     super.onResume();
-    Log.d(TAG, "onResume() called");
+    Timber.d("onResume() called");
   }
 
   @Override
   public void onStop() {
     super.onStop();
-    Log.d(TAG, "onStop() called");
+    Timber.d("onStop() called");
   }
 
   @Override
   public void onDestroy() {
     super.onDestroy();
-    Log.d(TAG, "onDestroy() called");
+    Timber.d("onDestroy() called");
   }
 
   private void updateQuestion() {
