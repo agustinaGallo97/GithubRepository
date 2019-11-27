@@ -3,6 +3,8 @@ package com.bignerdranch.android.geoquiz.views;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.widget.Button;
@@ -23,13 +25,14 @@ import androidx.annotation.StringRes;
 import timber.log.Timber;
 
 public class QuizActivity extends AppCompatActivity {
-  private static final String TAG = "QuizActivity";
   private static final String KEY_INDEX = "index";
+  private static final int REQUEST_CODE_CHEAT = 0;
 
   @SuppressWarnings("FieldCanBeLocal")
   private Button trueButton;
   @SuppressWarnings("FieldCanBeLocal")
   private Button falseButton;
+  private Button cheatButton;
   private ImageButton nextButton;
   private ImageButton prevButton;
   private TextView questionTextView;
@@ -37,6 +40,7 @@ public class QuizActivity extends AppCompatActivity {
   private int currentIndex = 0;
   private int countOfCorrectQuestionsResolved = 0;
   private int countOfQuestionsResolved = 0;
+  private boolean isCheater;
   @NonNull
   private final Set<Question> resolvedQuestions = new HashSet();
 
@@ -66,20 +70,43 @@ public class QuizActivity extends AppCompatActivity {
     falseButton = findViewById(R.id.questionButtonFalse);
     falseButton.setOnClickListener(v -> updateView(false));
 
+    cheatButton = findViewById(R.id.cheatButton);
+    cheatButton.setOnClickListener(v -> {
+      boolean answerIsTrue = questionBank.get(currentIndex).isAnswerTrue();
+      Intent intent = CheatActivity.newIntent(this, answerIsTrue);
+      startActivityForResult(intent, REQUEST_CODE_CHEAT);
+    });
+
     prevButton = findViewById(R.id.prevButton);
     prevButton.setOnClickListener(v -> {
       if (currentIndex > 0) {
         currentIndex = (currentIndex - 1) % questionBank.size();
+        isCheater = false;
         updateQuestion();
       }
     });
     nextButton = findViewById(R.id.nextButton);
     nextButton.setOnClickListener(v -> {
       currentIndex = (currentIndex + 1) % questionBank.size();
+      isCheater = false;
       updateQuestion();
     });
 
     updateQuestion();
+  }
+
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (resultCode != Activity.RESULT_OK) {
+      return;
+    }
+
+    if (requestCode == REQUEST_CODE_CHEAT) {
+      if (data == null) {
+        return;
+      }
+      isCheater = CheatActivity.wasAnswerShown(data);
+    }
   }
 
   @Override
@@ -142,10 +169,15 @@ public class QuizActivity extends AppCompatActivity {
 
   private void showToastCorrectly(boolean isCorrect) {
     @StringRes
-    int answerTest = isCorrect ? R.string.correct : R.string.incorrect;
+    int answerTest = isCheater ? R.string.judgment_toast : getAnswerText(isCorrect);
     Toast toast = Toast.makeText(this, answerTest, Toast.LENGTH_SHORT);
     toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
     toast.show();
+  }
+
+  @StringRes
+  private int getAnswerText(boolean isCorrect) {
+    return isCorrect ? R.string.correct : R.string.incorrect;
   }
 
   private void increaseCounters(boolean isCorrect) {
@@ -155,8 +187,7 @@ public class QuizActivity extends AppCompatActivity {
     countOfQuestionsResolved += 1;
   }
 
-  @NonNull
-  private void updateResolvedQuestions(Question actualQuestion) {
+  private void updateResolvedQuestions(@NonNull Question actualQuestion) {
     resolvedQuestions.add(actualQuestion);
     setButtonsState(false);
   }
