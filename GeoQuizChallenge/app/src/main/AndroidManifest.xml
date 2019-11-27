@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         >
+
         <activity android:name=".views.CheatActivity" />
         <activity android:name=".views.QuizActivity">
             <intent-filter>
