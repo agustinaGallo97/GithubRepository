@@ -1,0 +1,11 @@
+--input
+/home/toshiba/Desktop/Repo/app/src/main/java/com/bignerdranch/android/geoquiz/models/QuizViewModel.kt,/home/toshiba/Desktop/Repo/app/src/main/java/com/bignerdranch/android/geoquiz/views/QuizActivity.kt
+--config
+/home/toshiba/Desktop/Repo/config/detekt/detekt.yml
+--report
+xml:/home/toshiba/Desktop/Repo/build/reports/detekt/detekt.xml
+--report
+html:/home/toshiba/Desktop/Repo/build/reports/detekt/detekt.html
+--report
+txt:/home/toshiba/Desktop/Repo/build/reports/detekt/detekt.txt
+--auto-correct

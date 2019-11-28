@@ -1,0 +1,2 @@
+TooManyFunctions - 16/11 - [QuizActivity] at /home/toshiba/Desktop/Repo/app/src/main/java/com/bignerdranch/android/geoquiz/views/QuizActivity.kt:24:1 - Signature=QuizActivity.kt$QuizActivity : AppCompatActivity
+NoBlankLineBeforeRbrace - [PsiWhiteSpace] at /home/toshiba/Desktop/Repo/app/src/main/java/com/bignerdranch/android/geoquiz/views/QuizActivity.kt:179:6 - Signature=

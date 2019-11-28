@@ -1,0 +1,5 @@
+--generate-config
+--config
+/home/toshiba/Desktop/Repo/config/detekt/detekt.yml
+--input
+/home/toshiba/Desktop/Repo/app/src/main/java/com/bignerdranch/android/geoquiz/models/QuizViewModel.kt,/home/toshiba/Desktop/Repo/app/src/main/java/com/bignerdranch/android/geoquiz/views/QuizActivity.kt
