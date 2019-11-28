@@ -22,6 +22,10 @@ import kotlinx.android.synthetic.main.activity_quiz.*
 import timber.log.Timber
 
 class QuizActivity : AppCompatActivity() {
+    companion object {
+        private val KEY_INDEX = "index"
+        private val REQUEST_CODE_CHEAT = 0
+    }
 
     private var countOfCorrectQuestionsResolved = 0
     private var countOfQuestionsResolved = 0
@@ -43,7 +47,7 @@ class QuizActivity : AppCompatActivity() {
         val currentIndex = savedInstanceState?.getInt(KEY_INDEX, 0) ?: 0
         quizViewModel.currentIndex = currentIndex
 
-        questionTextView!!.setOnClickListener { v ->
+        questionTextView.setOnClickListener { v ->
             quizViewModel.moveToNext()
             updateQuestion()
         }
@@ -120,7 +124,7 @@ class QuizActivity : AppCompatActivity() {
 
     private fun updateQuestion() {
         val actualQuestion = quizViewModel.currentQuestion
-        questionTextView!!.setText(quizViewModel.currentQuestionText)
+        questionTextView.setText(quizViewModel.currentQuestionText)
         setButtonsState(!resolvedQuestions.contains(actualQuestion))
         showPercentage()
     }
@@ -145,9 +149,8 @@ class QuizActivity : AppCompatActivity() {
     }
 
     @StringRes
-    private fun getAnswerText(isCorrect: Boolean): Int {
-        return if (isCorrect) R.string.correct else R.string.incorrect
-    }
+    private fun getAnswerText(isCorrect: Boolean): Int =
+            if (isCorrect) R.string.correct else R.string.incorrect
 
     private fun increaseCounters(isCorrect: Boolean) {
         if (isCorrect) {
@@ -171,11 +174,6 @@ class QuizActivity : AppCompatActivity() {
             val percentage = "$countOfCorrectQuestionsResolved/$countOfQuestionsResolved"
             Toast.makeText(this, "The average is: $percentage", Toast.LENGTH_SHORT).show()
         }
-    }
-
-    companion object {
-        private val KEY_INDEX = "index"
-        private val REQUEST_CODE_CHEAT = 0
     }
 
 }

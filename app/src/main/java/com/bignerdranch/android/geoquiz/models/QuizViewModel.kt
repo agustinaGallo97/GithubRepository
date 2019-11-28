@@ -3,8 +3,6 @@ package com.bignerdranch.android.geoquiz.models
 import androidx.lifecycle.ViewModel
 import com.bignerdranch.android.geoquiz.controllers.QuestionController
 
-private const val TAG = "QuiezViewModel"
-
 class QuizViewModel : ViewModel() {
     var currentIndex = 0
     val questionBank = QuestionController.getInstance().questionBank
