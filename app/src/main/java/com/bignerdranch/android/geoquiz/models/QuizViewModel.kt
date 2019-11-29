@@ -3,8 +3,11 @@ package com.bignerdranch.android.geoquiz.models
 import androidx.lifecycle.ViewModel
 import com.bignerdranch.android.geoquiz.controllers.QuestionController
 
+private const val TAG = "QuiezViewModel"
+
 class QuizViewModel : ViewModel() {
     var currentIndex = 0
+    var isCheater = false
     val questionBank = QuestionController.getInstance().questionBank
 
     val currentQuestion: Question
@@ -18,9 +21,11 @@ class QuizViewModel : ViewModel() {
 
     fun moveToNext() {
         currentIndex = (currentIndex + 1) % questionBank.size
+        isCheater = false
     }
 
     fun moveToPrev() {
         currentIndex = (currentIndex - 1) % questionBank.size
+        isCheater = false
     }
 }

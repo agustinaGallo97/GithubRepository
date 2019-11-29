@@ -17,6 +17,7 @@ import java.util.HashSet
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModelProviders
 import com.bignerdranch.android.geoquiz.models.QuizViewModel
+import com.bignerdranch.android.geoquiz.views.CheatActivity.Companion.EXTRA_ANSWER_SHOWN
 import kotlinx.android.synthetic.main.activity_quiz.*
 
 import timber.log.Timber
@@ -25,11 +26,11 @@ class QuizActivity : AppCompatActivity() {
     companion object {
         private val KEY_INDEX = "index"
         private val REQUEST_CODE_CHEAT = 0
+        private val IS_CHEATER = "cheat"
     }
 
     private var countOfCorrectQuestionsResolved = 0
     private var countOfQuestionsResolved = 0
-    private var isCheater: Boolean = false
     private val resolvedQuestions = HashSet<Question>()
     private val quizViewModel: QuizViewModel by lazy {
         ViewModelProviders.of(this).get(QuizViewModel::class.java)
@@ -47,7 +48,10 @@ class QuizActivity : AppCompatActivity() {
         val currentIndex = savedInstanceState?.getInt(KEY_INDEX, 0) ?: 0
         quizViewModel.currentIndex = currentIndex
 
-        questionTextView.setOnClickListener { v ->
+        val hasCheat = savedInstanceState?.getBoolean(IS_CHEATER, false) ?: false
+        quizViewModel.isCheater = hasCheat
+        
+      questionTextView.setOnClickListener { v ->
             quizViewModel.moveToNext()
             updateQuestion()
         }
@@ -59,19 +63,18 @@ class QuizActivity : AppCompatActivity() {
         cheatButton.setOnClickListener { v ->
             val answerIsTrue = quizViewModel.currentQuestionAnswer
             val intent = CheatActivity.newIntent(this, answerIsTrue)
+            quizViewModel.isCheater = true
             startActivityForResult(intent, REQUEST_CODE_CHEAT)
         }
 
         prevButton.setOnClickListener { v ->
             if (quizViewModel.currentIndex > 0) {
                 quizViewModel.moveToPrev()
-                isCheater = false
                 updateQuestion()
             }
         }
         nextButton.setOnClickListener { v ->
             quizViewModel.moveToNext()
-            isCheater = false
             updateQuestion()
         }
 
@@ -79,15 +82,13 @@ class QuizActivity : AppCompatActivity() {
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK) {
             return
         }
 
         if (requestCode == REQUEST_CODE_CHEAT) {
-            if (data == null) {
-                return
-            }
-            isCheater = CheatActivity.wasAnswerShown(data)
+            quizViewModel.isCheater = data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
         }
     }
 
@@ -95,6 +96,7 @@ class QuizActivity : AppCompatActivity() {
         super.onSaveInstanceState(savedInstanceState)
         Timber.d("onSaveInstanceState")
         savedInstanceState.putInt(KEY_INDEX, quizViewModel.currentIndex)
+        savedInstanceState.putBoolean(IS_CHEATER, quizViewModel.isCheater)
     }
 
     public override fun onStart() {
@@ -142,7 +144,8 @@ class QuizActivity : AppCompatActivity() {
 
     private fun showToastCorrectly(isCorrect: Boolean) {
         @StringRes
-        val answerTest = if (isCheater) R.string.judgment_toast else getAnswerText(isCorrect)
+        val answerTest = if (quizViewModel.isCheater) R.string.judgment_toast else getAnswerText(isCorrect)
+
         val toast = Toast.makeText(this, answerTest, Toast.LENGTH_SHORT)
         toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 0)
         toast.show()
@@ -151,7 +154,7 @@ class QuizActivity : AppCompatActivity() {
     @StringRes
     private fun getAnswerText(isCorrect: Boolean): Int =
             if (isCorrect) R.string.correct else R.string.incorrect
-
+  
     private fun increaseCounters(isCorrect: Boolean) {
         if (isCorrect) {
             countOfCorrectQuestionsResolved += 1
@@ -165,8 +168,8 @@ class QuizActivity : AppCompatActivity() {
     }
 
     private fun setButtonsState(enabled: Boolean) {
-        questionButtonFalse!!.isEnabled = enabled
-        questionButtonTrue!!.isEnabled = enabled
+        questionButtonFalse.isEnabled = enabled
+        questionButtonTrue.isEnabled = enabled
     }
 
     private fun showPercentage() {
