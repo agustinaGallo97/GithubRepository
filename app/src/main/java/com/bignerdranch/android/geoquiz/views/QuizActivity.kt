@@ -50,8 +50,8 @@ class QuizActivity : AppCompatActivity() {
 
         val hasCheat = savedInstanceState?.getBoolean(IS_CHEATER, false)?:false
         quizViewModel.isCheater = hasCheat
-
-        questionTextView.setOnClickListener { v ->
+        
+      questionTextView.setOnClickListener { v ->
             quizViewModel.moveToNext()
             updateQuestion()
         }
@@ -145,16 +145,16 @@ class QuizActivity : AppCompatActivity() {
     private fun showToastCorrectly(isCorrect: Boolean) {
         @StringRes
         val answerTest = if (quizViewModel.isCheater) R.string.judgment_toast else getAnswerText(isCorrect)
+
         val toast = Toast.makeText(this, answerTest, Toast.LENGTH_SHORT)
         toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 0)
         toast.show()
     }
 
     @StringRes
-    private fun getAnswerText(isCorrect: Boolean): Int {
-        return if (isCorrect) R.string.correct else R.string.incorrect
-    }
-
+    private fun getAnswerText(isCorrect: Boolean): Int =
+            if (isCorrect) R.string.correct else R.string.incorrect
+  
     private fun increaseCounters(isCorrect: Boolean) {
         if (isCorrect) {
             countOfCorrectQuestionsResolved += 1
