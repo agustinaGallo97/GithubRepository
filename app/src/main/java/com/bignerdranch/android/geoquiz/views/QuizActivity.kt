@@ -48,7 +48,7 @@ class QuizActivity : AppCompatActivity() {
         val currentIndex = savedInstanceState?.getInt(KEY_INDEX, 0) ?: 0
         quizViewModel.currentIndex = currentIndex
 
-        val hasCheat = savedInstanceState?.getBoolean(IS_CHEATER, false)?:false
+        val hasCheat = savedInstanceState?.getBoolean(IS_CHEATER, false) ?: false
         quizViewModel.isCheater = hasCheat
         
       questionTextView.setOnClickListener { v ->
@@ -63,7 +63,7 @@ class QuizActivity : AppCompatActivity() {
         cheatButton.setOnClickListener { v ->
             val answerIsTrue = quizViewModel.currentQuestionAnswer
             val intent = CheatActivity.newIntent(this, answerIsTrue)
-            quizViewModel.isCheater=true
+            quizViewModel.isCheater = true
             startActivityForResult(intent, REQUEST_CODE_CHEAT)
         }
 
@@ -88,7 +88,7 @@ class QuizActivity : AppCompatActivity() {
         }
 
         if (requestCode == REQUEST_CODE_CHEAT) {
-           quizViewModel.isCheater = data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false)?:false
+            quizViewModel.isCheater = data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
         }
     }
 
